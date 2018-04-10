@@ -1,5 +1,7 @@
 package com.revolut.test;
 
+import com.revolut.test.db.TransferDAO;
+import com.revolut.test.dto.TransferDTO;
 import com.revolut.test.health.SimpleHealthCheck;
 import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.db.AccountDAO;
@@ -38,7 +40,7 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
 
         AccountDAO dao = jdbi.onDemand(AccountDAO.class);
-        System.out.println("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+        TransferDAO transferDAO = jdbi.onDemand(TransferDAO.class);
         dao.createTransferTable();
         dao.insert(1, 2);
         System.out.println(dao.findAmountById(1));

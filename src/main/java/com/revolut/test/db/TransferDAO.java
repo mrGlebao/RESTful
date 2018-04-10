@@ -1,19 +1,17 @@
 package com.revolut.test.db;
 
-import com.revolut.test.db.AccountDAO;
+import org.jdbi.v3.sqlobject.CreateSqlObject;
+import org.jdbi.v3.sqlobject.transaction.Transaction;
 
-public class TransferDAO {
+public abstract class TransferDAO {
 
-    private final AccountDAO accounts;
+    @CreateSqlObject
+    abstract AccountDAO dao();
 
-    public TransferDAO(AccountDAO accounts) {
-        this.accounts = accounts;
-    }
-
+    @Transaction
     public void transfer(Integer from, Integer to, Integer amount) {
-        //ToDo: needs transaction
-        accounts.update(from, accounts.findAmountById(from) - amount);
-        accounts.update(to, accounts.findAmountById(to) + amount);
+        dao().update(from, dao().findAmountById(from) - amount);
+        dao().update(to, dao().findAmountById(to) + amount);
     }
 
 }
