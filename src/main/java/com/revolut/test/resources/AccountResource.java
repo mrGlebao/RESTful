@@ -31,7 +31,7 @@ public class AccountResource {
     @Timed
     public Response put(@PathParam("user") int user, @QueryParam("amount") int amount) {
         dao.insert(user, amount);
-        return Response.ok(new AccountDTO(user, dao.findAmountById(user))).build();
+        return Response.ok(new AccountDTO(user, amount)).build();
     }
 
     @POST
@@ -39,7 +39,7 @@ public class AccountResource {
     @Timed
     public Response update(@PathParam("user") int user, @QueryParam("amount") int amount) {
         dao.update(user, amount);
-        return Response.ok(new AccountDTO(user, dao.findAmountById(user))).build();
+        return Response.ok(new AccountDTO(user, amount)).build();
     }
 
 }
