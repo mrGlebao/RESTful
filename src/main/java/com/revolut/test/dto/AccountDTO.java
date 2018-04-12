@@ -1,5 +1,7 @@
 package com.revolut.test.dto;
 
+import org.jdbi.v3.core.mapper.reflect.JdbiConstructor;
+
 public class AccountDTO {
 
     private int id;
@@ -8,6 +10,7 @@ public class AccountDTO {
 
     public AccountDTO(){}
 
+    @JdbiConstructor
     public AccountDTO(int id, int amount) {
         this.id = id;
         this.amount = amount;

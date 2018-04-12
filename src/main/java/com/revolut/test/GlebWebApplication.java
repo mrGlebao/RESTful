@@ -6,6 +6,7 @@ import com.revolut.test.health.SimpleHealthCheck;
 import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.db.AccountDAO;
 import com.revolut.test.resources.AccountResource;
+import com.revolut.test.resources.TransferResource;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -42,12 +43,11 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
         AccountDAO dao = jdbi.onDemand(AccountDAO.class);
         TransferDAO transferDAO = jdbi.onDemand(TransferDAO.class);
         dao.createTransferTable();
-        dao.insert(1, 2);
-        System.out.println(dao.findAmountById(1));
 
         jdbi.installPlugin(new H2DatabasePlugin());
         jdbi.installPlugin(new SqlObjectPlugin());
         environment.jersey().register(new AccountResource(dao));
+        environment.jersey().register(new TransferResource(transferDAO));
 
     }
 

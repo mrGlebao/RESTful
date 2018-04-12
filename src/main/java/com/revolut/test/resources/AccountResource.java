@@ -30,7 +30,7 @@ public class AccountResource {
     @Path("/{user}/add")
     @Timed
     public Response put(@PathParam("user") int user, @QueryParam("amount") int amount) {
-        dao.insert(user, amount);
+        dao.insert(new AccountDTO(user, amount));
         return Response.ok(new AccountDTO(user, amount)).build();
     }
 
