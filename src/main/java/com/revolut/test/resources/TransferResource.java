@@ -22,11 +22,12 @@ public class TransferResource {
     }
 
     @POST
+    @Consumes({"application/json"})
     @Path("/transfer")
     @Timed
-    public Response update(@QueryParam("idFrom") int idFrom, @QueryParam("idTo") int idTo, @QueryParam("amount") int amount) {
-        dao.transfer(idFrom, idTo, amount);
-        return Response.ok(new TransferDTO(idFrom, idTo, amount)).build();
+    public Response update(final TransferDTO dto) {
+        dao.transfer(dto.getIdFrom(), dto.getIdTo(), dto.getAmount());
+        return Response.ok(dto).build();
     }
 
 }

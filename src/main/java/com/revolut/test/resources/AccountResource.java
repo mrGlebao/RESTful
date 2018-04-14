@@ -29,17 +29,17 @@ public class AccountResource {
     @PUT
     @Path("/{user}/add")
     @Timed
-    public Response put(@PathParam("user") int user, @QueryParam("amount") int amount) {
-        dao.insert(new AccountDTO(user, amount));
-        return Response.ok(new AccountDTO(user, amount)).build();
+    public Response add(final AccountDTO dto) {
+        dao.insert(dto);
+        return Response.ok(dto).build();
     }
 
     @POST
     @Path("/{user}/update")
     @Timed
-    public Response update(@PathParam("user") int user, @QueryParam("amount") int amount) {
-        dao.update(user, amount);
-        return Response.ok(new AccountDTO(user, amount)).build();
+    public Response update(final AccountDTO dto) {
+        dao.update(dto);
+        return Response.ok(dto).build();
     }
 
 }

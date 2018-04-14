@@ -1,6 +1,7 @@
 package com.revolut.test;
 
 import com.revolut.test.db.TransferDAO;
+import com.revolut.test.dto.AccountDTO;
 import com.revolut.test.dto.TransferDTO;
 import com.revolut.test.health.SimpleHealthCheck;
 import com.revolut.test.resources.PingPongResource;
@@ -42,13 +43,21 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
 
         AccountDAO dao = jdbi.onDemand(AccountDAO.class);
         TransferDAO transferDAO = jdbi.onDemand(TransferDAO.class);
-        dao.createTransferTable();
+        initEntities(dao);
 
         jdbi.installPlugin(new H2DatabasePlugin());
         jdbi.installPlugin(new SqlObjectPlugin());
         environment.jersey().register(new AccountResource(dao));
         environment.jersey().register(new TransferResource(transferDAO));
 
+    }
+
+    public void initEntities(AccountDAO dao) {
+        dao.createTransferTable();
+        dao.insertNamed(1, 1000);
+        dao.insertNamed(2, 2000);
+        dao.insertNamed(3, 3000);
+        dao.insert(new AccountDTO(4, 4000));
     }
 
 }

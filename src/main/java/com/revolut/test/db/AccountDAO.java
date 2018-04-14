@@ -4,9 +4,9 @@ import com.revolut.test.dto.AccountDTO;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
+import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
-import org.jdbi.v3.sqlobject.transaction.Transaction;
 
 import java.util.List;
 
@@ -29,6 +29,11 @@ public interface AccountDAO {
     int findAmountById(@Bind("id") int id);
 
     @SqlUpdate("update account set amount = :amount where id = :id")
-    int update(@Bind("id") int id, @Bind("amount") int amount);
+    @GetGeneratedKeys
+    int updateNamed(@Bind("id") int id, @Bind("amount") int amount);
+
+    @SqlUpdate("update account set amount = :amount where id = :id")
+    @RegisterBeanMapper(AccountDTO.class)
+    int update(@BindBean AccountDTO dto);
 
 }

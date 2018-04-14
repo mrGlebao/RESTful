@@ -8,6 +8,9 @@ public class TransferDTO {
 
     private int amount;
 
+    public TransferDTO() {
+    }
+
     public TransferDTO(int idFrom, int idTo, int amount) {
         this.idFrom = idFrom;
         this.idTo = idTo;
