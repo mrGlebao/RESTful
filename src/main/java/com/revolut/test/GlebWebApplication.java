@@ -1,12 +1,13 @@
 package com.revolut.test;
 
-import com.revolut.test.db.TransferDAO;
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.dto.TransferDTO;
-import com.revolut.test.health.SimpleHealthCheck;
-import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.db.AccountDAO;
+import com.revolut.test.db.TransferDAO;
+import com.revolut.test.db.impl.AccountDAOImpl;
+import com.revolut.test.db.impl.TransferDAOImpl;
+import com.revolut.test.dto.AccountDTO;
+import com.revolut.test.health.SimpleHealthCheck;
 import com.revolut.test.resources.AccountResource;
+import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.resources.TransferResource;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi3.JdbiFactory;
@@ -41,8 +42,8 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
 
-        AccountDAO dao = jdbi.onDemand(AccountDAO.class);
-        TransferDAO transferDAO = jdbi.onDemand(TransferDAO.class);
+        AccountDAO dao = new AccountDAOImpl(jdbi);//jdbi.onDemand(AccountDAO.class);
+        TransferDAO transferDAO = new TransferDAOImpl(jdbi);//jdbi.onDemand(TransferDAO.class);
         initEntities(dao);
 
         jdbi.installPlugin(new H2DatabasePlugin());
