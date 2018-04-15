@@ -5,11 +5,9 @@ import com.revolut.test.dto.AccountDTO;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
-import java.util.List;
-
 public class AccountDAOImpl implements AccountDAO {
 
-    public final Jdbi jdbi;
+    private final Jdbi jdbi;
 
     public AccountDAOImpl(Jdbi jdbi) {
         this.jdbi = jdbi;
@@ -23,25 +21,19 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public void insertNamed(int id, int amount) {
-        jdbi.useHandle(h ->
-                h.createUpdate("insert into account (id, amount) values (:id, :amount)")
-                        .bind("id", id)
-                        .bind("amount", amount)
-                        .execute());
-    }
-
-    @Override
-    public void insertNamedWithHandle(int id, int amount, Handle h) {
-        h.createUpdate("insert into account (id, amount) values (:id, :amount)")
-                .bind("id", id)
-                .bind("amount", amount)
-                .execute();
-    }
-
-    @Override
     public void insert(AccountDTO dto) {
-        insertNamed(dto.getId(), dto.getAmount());
+        jdbi.useHandle(h -> insert(dto, h));
+    }
+
+    @Override
+    public void insert(AccountDTO dto, Handle h) {
+        if (dto.getAmount() < 0) {
+            throw new RuntimeException();
+        }
+        h.createUpdate("insert into account (id, amount) values (:id, :amount)")
+                .bind("id", dto.getId())
+                .bind("amount", dto.getAmount())
+                .execute();
     }
 
     @Override
@@ -54,38 +46,21 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public int findAmountById(int id) {
+    public int update(AccountDTO dto) {
         return jdbi.withHandle(
-                h -> h.createQuery("select amount from account where id = :id")
-                        .bind("id", id)
-                        .mapTo(Integer.class)
-                        .findOnly()
+                h -> update(dto, h)
         );
     }
 
     @Override
-    public int updateNamed(int id, int amount) {
-        if (amount < 0) {
+    public int update(AccountDTO dto, Handle h) {
+        if (dto.getAmount() < 0) {
             throw new RuntimeException();
         }
-        return jdbi.withHandle(
-                h -> h.createUpdate("update account set amount = :amount where id = :id")
-                        .bind("id", id)
-                        .bind("amount", amount)
-                        .execute()
-        );
-    }
-
-    @Override
-    public int updateNamedWithHandle(int id, int amount, Handle h) {
         return h.createUpdate("update account set amount = :amount where id = :id")
-                .bind("id", id)
-                .bind("amount", amount)
+                .bind("id", dto.getId())
+                .bind("amount", dto.getAmount())
                 .execute();
     }
 
-    @Override
-    public int update(AccountDTO dto) {
-        return updateNamed(dto.getId(), dto.getAmount());
-    }
 }

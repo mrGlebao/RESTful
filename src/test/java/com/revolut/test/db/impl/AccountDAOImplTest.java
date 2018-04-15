@@ -2,20 +2,14 @@ package com.revolut.test.db.impl;
 
 import com.revolut.test.api.H2JDBIRule;
 import com.revolut.test.db.AccountDAO;
-import com.revolut.test.db.TransferDAO;
 import com.revolut.test.dto.AccountDTO;
-import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.spy;
 
 public class AccountDAOImplTest {
 

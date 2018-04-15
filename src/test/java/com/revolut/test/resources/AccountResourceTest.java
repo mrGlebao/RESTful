@@ -23,13 +23,11 @@ public class AccountResourceTest {
 
     @Before
     public void setup() {
-        when(dao.findAmountById(account.getId())).thenReturn(account.getAmount());
+        when(dao.getById(account.getId())).thenReturn(account);
     }
 
     @After
     public void tearDown() {
-        // we have to reset the mock after each test because of the
-        // @ClassRule, or use a @Rule as mentioned below.
         reset(dao);
     }
 

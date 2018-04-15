@@ -55,10 +55,8 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
 
     public void initEntities(AccountDAO dao) {
         dao.createTransferTable();
-        dao.insertNamed(1, 1000);
-        dao.insertNamed(2, 2000);
-        dao.insertNamed(3, 3000);
-        dao.insert(AccountDTO.of(4, 4000));
+        dao.insert(AccountDTO.of(1, 1000));
+        dao.insert(AccountDTO.of(2, 2000));
     }
 
 }

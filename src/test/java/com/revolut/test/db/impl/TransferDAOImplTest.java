@@ -4,6 +4,7 @@ import com.revolut.test.api.H2JDBIRule;
 import com.revolut.test.db.AccountDAO;
 import com.revolut.test.db.TransferDAO;
 import com.revolut.test.dto.AccountDTO;
+import com.revolut.test.dto.TransferDTO;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.After;
@@ -40,30 +41,29 @@ public class TransferDAOImplTest {
     @Test
     public void testTransfer_FailsOnFirstStep() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        doThrow(new RuntimeException()).when(accountDAOSpy).updateNamed(1, 50);
+        doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(1, 50));
 //        when(accountDAOSpy.updateNamed(2, 150)).thenCallRealMethod();
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
-            trDao.transfer(1, 2, 50);
+            trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
         } catch (RuntimeException ex) {
-            verify(accountDAOSpy, times(1)).updateNamed(anyInt(), anyInt());
-            assertEquals("donor-client money changed", 100, accountDAO.findAmountById(1));
-            assertEquals("acceptor-client money changed", 200, accountDAO.findAmountById(2));
+            verify(accountDAOSpy, times(1)).update(any(AccountDTO.class));
+            assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
+            assertEquals("acceptor-client money changed", 200, accountDAO.getById(2).getAmount());
         }
     }
 
     @Test
     public void testTransfer_FailsOnSecondStep() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        doThrow(new RuntimeException()).when(accountDAOSpy).updateNamed(2, 250);
-//        when(accountDAOSpy.updateNamed(2, 150)).thenCallRealMethod();
+        doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(2, 250));
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
-            trDao.transfer(1, 2, 50);
+            trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
         } catch (RuntimeException ex) {
-            verify(accountDAOSpy, times(2)).updateNamed(anyInt(), anyInt());
-            assertEquals("donor-client money changed", 100, accountDAO.findAmountById(1));
-            assertEquals("acceptor-client money changed", 200, accountDAO.findAmountById(2));
+            verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
+            assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
+            assertEquals("acceptor-client money changed", 200, accountDAO.getById(2).getAmount());
         }
     }
 
@@ -72,10 +72,10 @@ public class TransferDAOImplTest {
     public void testTransfer_Success() {
         AccountDAO accountDAOSpy = spy(accountDAO);
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
-        trDao.transfer(1, 2, 50);
-        verify(accountDAOSpy, times(2)).updateNamedWithHandle(anyInt(), anyInt(), any(Handle.class));
-        assertEquals("donor-client money changed", 50, accountDAO.findAmountById(1));
-        assertEquals("acceptor-client money changed", 250, accountDAO.findAmountById(2));
+        trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
+        verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
+        assertEquals("donor-client money changed", 50, accountDAO.getById(1).getAmount());
+        assertEquals("acceptor-client money changed", 250, accountDAO.getById(2).getAmount());
     }
 
 }

@@ -26,7 +26,7 @@ public class TransferResource {
     @Path("/transfer")
     @Timed
     public Response update(final TransferDTO dto) {
-        dao.transfer(dto.getIdFrom(), dto.getIdTo(), dto.getAmount());
+        dao.transfer(dto);
         return Response.ok(dto).build();
     }
 
