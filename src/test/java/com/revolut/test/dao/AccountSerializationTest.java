@@ -14,18 +14,16 @@ public class AccountSerializationTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     @Test
-    public void serializesToJSON() throws Exception {
-        final AccountDTO account = new AccountDTO(3, 12);
-
-        final String expected = MAPPER.writeValueAsString(
-                MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class));
-
-        assertEquals("unexpected serialization result", MAPPER.writeValueAsString(account), expected);
+    public void testAccountDTOSerialization_roundtrip() throws Exception {
+        String expected = MAPPER.writeValueAsString(AccountDTO.of(3, 12));
+        String actual = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class));
+        assertEquals("unexpected serialization result", expected, actual);
     }
 
     @Test
     public void deserializesFromJSON() throws Exception {
-        final AccountDTO account = new AccountDTO(3, 12);
-        assertEquals("unexpected deserialization result", MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class), account);
+        AccountDTO expected = AccountDTO.of(3, 12);
+        AccountDTO actual = MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class);
+        assertEquals("unexpected deserialization result", expected, actual);
     }
 }
