@@ -2,6 +2,7 @@ package com.revolut.test.db.impl;
 
 import com.revolut.test.db.AccountDAO;
 import com.revolut.test.dto.AccountDTO;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
 import java.util.List;
@@ -31,6 +32,14 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
+    public void insertNamedWithHandle(int id, int amount, Handle h) {
+        h.createUpdate("insert into account (id, amount) values (:id, :amount)")
+                .bind("id", id)
+                .bind("amount", amount)
+                .execute();
+    }
+
+    @Override
     public void insert(AccountDTO dto) {
         insertNamed(dto.getId(), dto.getAmount());
     }
@@ -57,12 +66,23 @@ public class AccountDAOImpl implements AccountDAO {
 
     @Override
     public int updateNamed(int id, int amount) {
+        if (amount < 0) {
+            throw new RuntimeException();
+        }
         return jdbi.withHandle(
                 h -> h.createUpdate("update account set amount = :amount where id = :id")
                         .bind("id", id)
                         .bind("amount", amount)
                         .execute()
         );
+    }
+
+    @Override
+    public int updateNamedWithHandle(int id, int amount, Handle h) {
+        return h.createUpdate("update account set amount = :amount where id = :id")
+                .bind("id", id)
+                .bind("amount", amount)
+                .execute();
     }
 
     @Override

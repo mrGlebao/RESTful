@@ -1,6 +1,7 @@
 package com.revolut.test.db;
 
 import com.revolut.test.dto.AccountDTO;
+import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
@@ -18,6 +19,8 @@ public interface AccountDAO {
     @SqlUpdate("insert into account (id, amount) values (:id, :amount)")
     void insertNamed(@Bind("id") int id, @Bind("amount") int amount);
 
+    void insertNamedWithHandle(int id, int amount, Handle h);
+
     @SqlUpdate("insert into account (id, amount) values (:id, :amount)")
     void insert(@BindBean AccountDTO dto);
 
@@ -31,6 +34,8 @@ public interface AccountDAO {
     @SqlUpdate("update account set amount = :amount where id = :id")
     @GetGeneratedKeys
     int updateNamed(@Bind("id") int id, @Bind("amount") int amount);
+
+    int updateNamedWithHandle(int id, @Bind("amount") int amount, Handle h);
 
     @SqlUpdate("update account set amount = :amount where id = :id")
     @RegisterBeanMapper(AccountDTO.class)

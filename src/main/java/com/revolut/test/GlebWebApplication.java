@@ -43,7 +43,7 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
 
         AccountDAO dao = new AccountDAOImpl(jdbi);//jdbi.onDemand(AccountDAO.class);
-        TransferDAO transferDAO = new TransferDAOImpl(jdbi);//jdbi.onDemand(TransferDAO.class);
+        TransferDAO transferDAO = new TransferDAOImpl(jdbi, dao);//jdbi.onDemand(TransferDAO.class);
         initEntities(dao);
 
         jdbi.installPlugin(new H2DatabasePlugin());
