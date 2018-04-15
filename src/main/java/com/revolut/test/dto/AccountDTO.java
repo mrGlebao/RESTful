@@ -1,19 +1,22 @@
 package com.revolut.test.dto;
 
-import org.jdbi.v3.core.mapper.reflect.JdbiConstructor;
-
 public class AccountDTO {
 
     private int id;
 
     private int amount;
 
-    public AccountDTO(){}
+    public AccountDTO() {
+    }
 
-    @JdbiConstructor
-    public AccountDTO(int id, int amount) {
+    //    @JdbiConstructor
+    private AccountDTO(int id, int amount) {
         this.id = id;
         this.amount = amount;
+    }
+
+    public static AccountDTO of(int id, int amount) {
+        return new AccountDTO(id, amount);
     }
 
     public int getId() {
@@ -34,15 +37,15 @@ public class AccountDTO {
 
     @Override
     public boolean equals(Object o) {
-        if(o instanceof AccountDTO) {
-            AccountDTO otherDTO = (AccountDTO)o;
+        if (o instanceof AccountDTO) {
+            AccountDTO otherDTO = (AccountDTO) o;
             return this.id == otherDTO.id && this.amount == otherDTO.amount;
         }
         return false;
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         int result = 0;
         result = 31 * amount + result;
         result = 31 * id + result;

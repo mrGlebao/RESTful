@@ -23,7 +23,7 @@ public class AccountResource {
     @Path("/{user}/view")
     @Timed
     public Response getUser(@PathParam("user") int user) {
-        return Response.ok(new AccountDTO(user, dao.findAmountById(user))).build();
+        return Response.ok(dao.getById(user)).build();
     }
 
     @PUT

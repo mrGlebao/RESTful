@@ -45,13 +45,12 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public List<AccountDTO> getById(int id) {
+    public AccountDTO getById(int id) {
         return jdbi.withHandle(
                 h -> h.createQuery("select * from account where id = :id")
                         .bind("id", id)
-                        .map((rs, ctx) -> new AccountDTO(rs.getInt("id"), rs.getInt("amount")))
-                        .list()
-        );
+                        .map((rs, ctx) -> AccountDTO.of(rs.getInt("id"), rs.getInt("amount")))
+                        .findOnly());
     }
 
     @Override

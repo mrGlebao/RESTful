@@ -58,7 +58,7 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
         dao.insertNamed(1, 1000);
         dao.insertNamed(2, 2000);
         dao.insertNamed(3, 3000);
-        dao.insert(new AccountDTO(4, 4000));
+        dao.insert(AccountDTO.of(4, 4000));
     }
 
 }

@@ -13,32 +13,22 @@ import java.util.List;
 
 public interface AccountDAO {
 
-    @SqlUpdate("create table account (id int primary key, amount int)")
     void createTransferTable();
 
-    @SqlUpdate("insert into account (id, amount) values (:id, :amount)")
-    void insertNamed(@Bind("id") int id, @Bind("amount") int amount);
+    void insertNamed(int id, int amount);
 
     void insertNamedWithHandle(int id, int amount, Handle h);
 
-    @SqlUpdate("insert into account (id, amount) values (:id, :amount)")
-    void insert(@BindBean AccountDTO dto);
+    void insert(AccountDTO dto);
 
-    @SqlQuery("select * from account where id = :id")
-    @RegisterBeanMapper(AccountDTO.class)
-    List<AccountDTO> getById(@Bind("id") int id);
+    AccountDTO getById(int id);
 
-    @SqlQuery("select amount from account where id = :id")
-    int findAmountById(@Bind("id") int id);
+    int findAmountById(int id);
 
-    @SqlUpdate("update account set amount = :amount where id = :id")
-    @GetGeneratedKeys
-    int updateNamed(@Bind("id") int id, @Bind("amount") int amount);
+    int updateNamed(int id, int amount);
 
-    int updateNamedWithHandle(int id, @Bind("amount") int amount, Handle h);
+    int updateNamedWithHandle(int id, int amount, Handle h);
 
-    @SqlUpdate("update account set amount = :amount where id = :id")
-    @RegisterBeanMapper(AccountDTO.class)
-    int update(@BindBean AccountDTO dto);
+    int update(AccountDTO dto);
 
 }

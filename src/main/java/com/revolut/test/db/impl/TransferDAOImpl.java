@@ -15,20 +15,14 @@ public class TransferDAOImpl implements TransferDAO {
         this.jdbi = jdbi;
     }
 
-
-    @Override
-    public AccountDAO dao() {
-        return dao;
-    }
-
     @Override
     @Transaction
     public void transfer(Integer from, Integer to, Integer amount) {
         jdbi.useTransaction(
                 h -> {
 //                    if (dao().findAmountById(from) >= amount) {
-                        dao().updateNamedWithHandle(from, dao().findAmountById(from) - amount, h);
-                        dao().updateNamedWithHandle(to, dao().findAmountById(to) + amount, h);
+                    dao.updateNamedWithHandle(from, dao.findAmountById(from) - amount, h);
+                    dao.updateNamedWithHandle(to, dao.findAmountById(to) + amount, h);
 //                    }
                 }
         );
