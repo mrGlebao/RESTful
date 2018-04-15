@@ -1,8 +1,6 @@
 package com.revolut.test.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.dto.TransferDTO;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Test;
 
