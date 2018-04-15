@@ -1,4 +1,4 @@
-package com.revolut.test.dao;
+package com.revolut.test.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revolut.test.dto.AccountDTO;

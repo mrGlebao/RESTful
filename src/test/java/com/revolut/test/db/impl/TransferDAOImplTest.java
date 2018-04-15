@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 public class TransferDAOImplTest {
 
-    private TransferDAOImpl transferDAO;
+    private TransferDTO dto = TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build();
     private AccountDAOImpl accountDAO;
     private Jdbi jdbi;
 
@@ -31,7 +31,6 @@ public class TransferDAOImplTest {
         accountDAO = new AccountDAOImpl(jdbi);
         accountDAO.insert(AccountDTO.of(1, 100));
         accountDAO.insert(AccountDTO.of(2, 200));
-        //transferDAO = new TransferDAOImpl(jdbi, accountDAO);
     }
 
     @After
@@ -42,10 +41,9 @@ public class TransferDAOImplTest {
     public void testTransfer_FailsOnFirstStep() {
         AccountDAO accountDAOSpy = spy(accountDAO);
         doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(1, 50));
-//        when(accountDAOSpy.updateNamed(2, 150)).thenCallRealMethod();
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
-            trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
+            trDao.transfer(dto);
         } catch (RuntimeException ex) {
             verify(accountDAOSpy, times(1)).update(any(AccountDTO.class));
             assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
@@ -59,7 +57,7 @@ public class TransferDAOImplTest {
         doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(2, 250));
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
-            trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
+            trDao.transfer(dto);
         } catch (RuntimeException ex) {
             verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
             assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
@@ -72,7 +70,7 @@ public class TransferDAOImplTest {
     public void testTransfer_Success() {
         AccountDAO accountDAOSpy = spy(accountDAO);
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
-        trDao.transfer(TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build());
+        trDao.transfer(dto);
         verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
         assertEquals("donor-client money changed", 50, accountDAO.getById(1).getAmount());
         assertEquals("acceptor-client money changed", 250, accountDAO.getById(2).getAmount());
