@@ -19,21 +19,17 @@ import static org.mockito.Mockito.*;
 public class AccountResourceTest {
 
     private static final AccountDAO dao = mock(AccountDAO.class);
-
-    private final AccountDTO dto = AccountDTO.of(1, 2);
-
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
             .addResource(new AccountResource(dao))
             .build();
-
+    private final AccountDTO dto = AccountDTO.of(1, 2);
     private final AccountDTO account = AccountDTO.of(1, 2);
 
     @Before
     public void setup() {
         when(dao.getById(anyInt())).thenReturn(account);
-//        when(dao.insert(any(AccountDTO.class)))
     }
 
     @After

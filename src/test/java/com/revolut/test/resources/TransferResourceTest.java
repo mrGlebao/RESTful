@@ -1,7 +1,6 @@
 package com.revolut.test.resources;
 
 import com.revolut.test.db.TransferDAO;
-import com.revolut.test.dto.AccountDTO;
 import com.revolut.test.dto.TransferDTO;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
@@ -24,7 +23,13 @@ public class TransferResourceTest {
             .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
             .addResource(new TransferResource(dao))
             .build();
-    private final TransferDTO dto = TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(1000).build();
+
+    private final TransferDTO dto = TransferDTO
+            .builder()
+            .withIdFrom(1)
+            .withIdTo(2)
+            .withAmount(1000)
+            .build();
 
     @Before
     public void setup() {
