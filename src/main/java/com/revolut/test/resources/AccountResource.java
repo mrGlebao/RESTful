@@ -27,7 +27,7 @@ public class AccountResource {
     }
 
     @PUT
-    @Path("/{user}/add")
+    @Path("/add")
     @Timed
     public Response add(final AccountDTO dto) {
         dao.insert(dto);

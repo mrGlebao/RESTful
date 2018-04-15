@@ -57,13 +57,13 @@ public class AccountResourceTest {
     public void testAccountResource_add() {
 
         Response response = resources
-                .target("/accounts/" + account.getId() + "/add")
+                .target("/accounts/add")
                 .request()
                 .put(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
 
         verify(dao, times(1)).insert(dto);
 
-        assertEquals("invalid response status", response.getStatus(), 200);
+        assertEquals("invalid put response status", response.getStatus(), 200);
     }
 
     @Test
@@ -75,7 +75,7 @@ public class AccountResourceTest {
 
         verify(dao, times(1)).update(account);
 
-        assertEquals("invalid get result", response.getStatus(), 200);
+        assertEquals("invalid post response status", response.getStatus(), 200);
     }
 
 
