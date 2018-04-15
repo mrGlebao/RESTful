@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 
-@Path("/accounts")
+@Path("/transfer")
 @Produces(MediaType.APPLICATION_JSON)
 public class TransferResource {
 
@@ -23,7 +23,6 @@ public class TransferResource {
 
     @POST
     @Consumes({"application/json"})
-    @Path("/transfer")
     @Timed
     public Response update(final TransferDTO dto) {
         dao.transfer(dto);
