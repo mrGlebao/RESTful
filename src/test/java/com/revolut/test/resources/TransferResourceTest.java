@@ -25,7 +25,6 @@ public class TransferResourceTest {
             .addResource(new TransferResource(dao))
             .build();
     private final TransferDTO dto = TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(1000).build();
-    private final AccountDTO account = AccountDTO.of(1, 2);
 
     @Before
     public void setup() {
