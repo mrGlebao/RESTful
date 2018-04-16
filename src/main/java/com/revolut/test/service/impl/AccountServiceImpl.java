@@ -4,8 +4,12 @@ import com.revolut.test.dao.AccountDAO;
 import com.revolut.test.entities.Account;
 import com.revolut.test.dto.Result;
 import com.revolut.test.service.AccountService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AccountServiceImpl implements AccountService {
+
+    private final Logger logger = LoggerFactory.getLogger(AccountServiceImpl.class);
 
     private final AccountDAO dao;
 
@@ -18,7 +22,8 @@ public class AccountServiceImpl implements AccountService {
         try {
             Account dto = dao.getById(i);
             return Result.success(dto);
-        } catch (RuntimeException ex) {
+        } catch (Exception ex) {
+            logger.error("Exception on get: ", ex);
             return Result.error(ex);
         }
     }
@@ -28,7 +33,8 @@ public class AccountServiceImpl implements AccountService {
         try {
             dao.insert(dto);
             return Result.success(dto);
-        } catch (RuntimeException ex) {
+        } catch (Exception ex) {
+            logger.error("Exception on add: ", ex);
             return Result.error(ex);
         }
     }
@@ -38,7 +44,8 @@ public class AccountServiceImpl implements AccountService {
         try {
             dao.update(dto);
             return Result.success(dto);
-        } catch (RuntimeException ex) {
+        } catch (Exception ex) {
+            logger.error("Exception on update: ", ex);
             return Result.error(ex);
         }
     }

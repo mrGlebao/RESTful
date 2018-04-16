@@ -4,10 +4,16 @@ import com.revolut.test.dao.AccountDAO;
 import com.revolut.test.entities.Account;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AccountDAOImpl implements AccountDAO {
 
+    private final Logger logger = LoggerFactory.getLogger(AccountDAOImpl.class);
+
     private final Jdbi jdbi;
+
+    private final String AMOUNT_IS_TOO_SMALL = "Amount can't be less than 0!";
 
     public AccountDAOImpl(Jdbi jdbi) {
         this.jdbi = jdbi;
@@ -28,7 +34,8 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public void insert(Account dto, Handle h) {
         if (dto.getAmount() < 0) {
-            throw new RuntimeException();
+            logger.error("Error on insert:");
+            throw new RuntimeException(AMOUNT_IS_TOO_SMALL);
         }
         h.createUpdate("insert into account (id, amount) values (:id, :amount)")
                 .bind("id", dto.getId())
@@ -55,7 +62,8 @@ public class AccountDAOImpl implements AccountDAO {
     @Override
     public int update(Account dto, Handle h) {
         if (dto.getAmount() < 0) {
-            throw new RuntimeException();
+            logger.error("Error on insert:");
+            throw new RuntimeException(AMOUNT_IS_TOO_SMALL);
         }
         return h.createUpdate("update account set amount = :amount where id = :id")
                 .bind("id", dto.getId())
