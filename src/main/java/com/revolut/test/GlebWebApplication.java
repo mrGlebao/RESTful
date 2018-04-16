@@ -9,6 +9,10 @@ import com.revolut.test.health.SimpleHealthCheck;
 import com.revolut.test.resources.AccountResource;
 import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.resources.TransferResource;
+import com.revolut.test.service.AccountService;
+import com.revolut.test.service.TransferService;
+import com.revolut.test.service.impl.AccountServiceImpl;
+import com.revolut.test.service.impl.TransferServiceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -44,12 +48,14 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
 
         AccountDAO dao = new AccountDAOImpl(jdbi);//jdbi.onDemand(AccountDAO.class);
         TransferDAO transferDAO = new TransferDAOImpl(jdbi, dao);//jdbi.onDemand(TransferDAO.class);
+        TransferService transferService = new TransferServiceImpl(transferDAO);
+        AccountService accountService = new AccountServiceImpl(dao);
         initEntities(dao);
 
         jdbi.installPlugin(new H2DatabasePlugin());
         jdbi.installPlugin(new SqlObjectPlugin());
-        environment.jersey().register(new AccountResource(dao));
-        environment.jersey().register(new TransferResource(transferDAO));
+        environment.jersey().register(new AccountResource(accountService));
+        environment.jersey().register(new TransferResource(transferService));
 
     }
 
