@@ -1,7 +1,7 @@
 package com.revolut.test.service;
 
 import com.revolut.test.entities.Account;
-import com.revolut.test.entities.Result;
+import com.revolut.test.dto.Result;
 
 public interface AccountService {
 

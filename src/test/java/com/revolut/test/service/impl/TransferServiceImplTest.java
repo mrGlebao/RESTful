@@ -1,10 +1,9 @@
 package com.revolut.test.service.impl;
 
 import com.revolut.test.dao.TransferDAO;
-import com.revolut.test.entities.Result;
+import com.revolut.test.dto.Result;
 import com.revolut.test.entities.Transfer;
 import com.revolut.test.service.TransferService;
-import com.revolut.test.service.impl.TransferServiceImpl;
 import org.junit.Test;
 
 import java.util.Random;

@@ -2,7 +2,7 @@ package com.revolut.test.service.impl;
 
 import com.revolut.test.dao.AccountDAO;
 import com.revolut.test.entities.Account;
-import com.revolut.test.entities.Result;
+import com.revolut.test.dto.Result;
 import com.revolut.test.service.AccountService;
 
 public class AccountServiceImpl implements AccountService {

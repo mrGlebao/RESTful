@@ -1,4 +1,4 @@
-package com.revolut.test.entities;
+package com.revolut.test.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,7 +17,6 @@ public class Result<T> {
     private Exception event;
 
     public Result() {
-        // Jackson deserialization
     }
 
     private Result(T data, Status status, Exception event) {

@@ -1,6 +1,6 @@
 package com.revolut.test.resources;
 
-import com.revolut.test.entities.Result;
+import com.revolut.test.dto.Result;
 import com.revolut.test.entities.Transfer;
 import com.revolut.test.service.TransferService;
 import io.dropwizard.testing.junit.ResourceTestRule;

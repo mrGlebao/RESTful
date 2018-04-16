@@ -1,6 +1,6 @@
 package com.revolut.test.service;
 
-import com.revolut.test.entities.Result;
+import com.revolut.test.dto.Result;
 import com.revolut.test.entities.Transfer;
 
 public interface TransferService {
