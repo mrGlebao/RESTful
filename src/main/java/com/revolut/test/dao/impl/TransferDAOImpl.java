@@ -1,0 +1,33 @@
+package com.revolut.test.dao.impl;
+
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.dao.TransferDAO;
+import com.revolut.test.entities.Account;
+import com.revolut.test.entities.Transfer;
+import org.jdbi.v3.core.Jdbi;
+import org.jdbi.v3.sqlobject.transaction.Transaction;
+
+public class TransferDAOImpl implements TransferDAO {
+
+    private final AccountDAO dao;
+    private final Jdbi jdbi;
+
+    public TransferDAOImpl(Jdbi jdbi, AccountDAO dao) {
+        this.dao = dao;
+        this.jdbi = jdbi;
+    }
+
+    @Override
+    @Transaction
+    public void transfer(Transfer dto) {
+        Account donor = dao.getById(dto.getIdFrom());
+        Account acceptor = dao.getById(dto.getIdTo());
+        jdbi.useTransaction(
+                h -> {
+                    dao.update(Account.of(donor.getId(), donor.getAmount() - dto.getAmount()), h);
+                    dao.update(Account.of(acceptor.getId(), acceptor.getAmount() + dto.getAmount()), h);
+                }
+        );
+    }
+
+}

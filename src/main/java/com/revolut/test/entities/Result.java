@@ -1,4 +1,4 @@
-package com.revolut.test.dto;
+package com.revolut.test.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

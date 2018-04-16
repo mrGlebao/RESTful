@@ -1,7 +1,7 @@
-package com.revolut.test.db.impl;
+package com.revolut.test.dao.impl;
 
-import com.revolut.test.db.AccountDAO;
-import com.revolut.test.dto.AccountDTO;
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.entities.Account;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 
@@ -21,12 +21,12 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public void insert(AccountDTO dto) {
+    public void insert(Account dto) {
         jdbi.useHandle(h -> insert(dto, h));
     }
 
     @Override
-    public void insert(AccountDTO dto, Handle h) {
+    public void insert(Account dto, Handle h) {
         if (dto.getAmount() < 0) {
             throw new RuntimeException();
         }
@@ -37,23 +37,23 @@ public class AccountDAOImpl implements AccountDAO {
     }
 
     @Override
-    public AccountDTO getById(int id) {
+    public Account getById(int id) {
         return jdbi.withHandle(
                 h -> h.createQuery("select * from account where id = :id")
                         .bind("id", id)
-                        .map((rs, ctx) -> AccountDTO.of(rs.getInt("id"), rs.getInt("amount")))
+                        .map((rs, ctx) -> Account.of(rs.getInt("id"), rs.getInt("amount")))
                         .findOnly());
     }
 
     @Override
-    public int update(AccountDTO dto) {
+    public int update(Account dto) {
         return jdbi.withHandle(
                 h -> update(dto, h)
         );
     }
 
     @Override
-    public int update(AccountDTO dto, Handle h) {
+    public int update(Account dto, Handle h) {
         if (dto.getAmount() < 0) {
             throw new RuntimeException();
         }

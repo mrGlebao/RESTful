@@ -1,8 +1,8 @@
 package com.revolut.test.service.impl;
 
-import com.revolut.test.db.AccountDAO;
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.dto.Result;
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.entities.Account;
+import com.revolut.test.entities.Result;
 import com.revolut.test.service.AccountService;
 
 public class AccountServiceImpl implements AccountService {
@@ -14,9 +14,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Result<AccountDTO> get(int i) {
+    public Result<Account> get(int i) {
         try {
-            AccountDTO dto = dao.getById(i);
+            Account dto = dao.getById(i);
             return Result.success(dto);
         } catch (RuntimeException ex) {
             return Result.error(ex);
@@ -24,7 +24,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Result<AccountDTO> add(AccountDTO dto) {
+    public Result<Account> add(Account dto) {
         try {
             dao.insert(dto);
             return Result.success(dto);
@@ -34,7 +34,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Result<AccountDTO> update(AccountDTO dto) {
+    public Result<Account> update(Account dto) {
         try {
             dao.update(dto);
             return Result.success(dto);

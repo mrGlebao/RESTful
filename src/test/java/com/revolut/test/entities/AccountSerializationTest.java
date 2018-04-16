@@ -1,7 +1,6 @@
-package com.revolut.test.dto;
+package com.revolut.test.entities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revolut.test.dto.AccountDTO;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Test;
 
@@ -14,16 +13,16 @@ public class AccountSerializationTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     @Test
-    public void testAccountDTOSerialization_roundtrip() throws Exception {
-        String expected = MAPPER.writeValueAsString(AccountDTO.of(3, 12));
-        String actual = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class));
+    public void testAccount_serialization_roundtrip() throws Exception {
+        String expected = MAPPER.writeValueAsString(Account.of(3, 12));
+        String actual = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/account.json"), Account.class));
         assertEquals("unexpected serialization result", expected, actual);
     }
 
     @Test
-    public void deserializesFromJSON() throws Exception {
-        AccountDTO expected = AccountDTO.of(3, 12);
-        AccountDTO actual = MAPPER.readValue(fixture("fixtures/account.json"), AccountDTO.class);
+    public void testAccount_deserializesFromJSON() throws Exception {
+        Account expected = Account.of(3, 12);
+        Account actual = MAPPER.readValue(fixture("fixtures/account.json"), Account.class);
         assertEquals("unexpected deserialization result", expected, actual);
     }
 }

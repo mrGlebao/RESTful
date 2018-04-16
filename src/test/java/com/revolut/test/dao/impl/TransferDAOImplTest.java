@@ -1,10 +1,10 @@
-package com.revolut.test.db.impl;
+package com.revolut.test.dao.impl;
 
-import com.revolut.test.api.H2JDBIRule;
-import com.revolut.test.db.AccountDAO;
-import com.revolut.test.db.TransferDAO;
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.dto.TransferDTO;
+import com.revolut.test.dao.H2JDBIRule;
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.dao.TransferDAO;
+import com.revolut.test.entities.Account;
+import com.revolut.test.entities.Transfer;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.After;
@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 public class TransferDAOImplTest {
 
-    private TransferDTO dto = TransferDTO.builder().withIdFrom(1).withIdTo(2).withAmount(50).build();
+    private Transfer dto = Transfer.builder().withIdFrom(1).withIdTo(2).withAmount(50).build();
     private AccountDAOImpl accountDAO;
     private Jdbi jdbi;
 
@@ -29,8 +29,8 @@ public class TransferDAOImplTest {
     public void init() {
         jdbi = rule.getJdbi();
         accountDAO = new AccountDAOImpl(jdbi);
-        accountDAO.insert(AccountDTO.of(1, 100));
-        accountDAO.insert(AccountDTO.of(2, 200));
+        accountDAO.insert(Account.of(1, 100));
+        accountDAO.insert(Account.of(2, 200));
     }
 
     @After
@@ -40,12 +40,12 @@ public class TransferDAOImplTest {
     @Test
     public void testTransfer_FailsOnFirstStep() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(1, 50));
+        doThrow(new RuntimeException()).when(accountDAOSpy).update(Account.of(1, 50));
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
             trDao.transfer(dto);
         } catch (RuntimeException ex) {
-            verify(accountDAOSpy, times(1)).update(any(AccountDTO.class));
+            verify(accountDAOSpy, times(1)).update(any(Account.class));
             assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
             assertEquals("acceptor-client money changed", 200, accountDAO.getById(2).getAmount());
         }
@@ -54,12 +54,12 @@ public class TransferDAOImplTest {
     @Test
     public void testTransfer_FailsOnSecondStep() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        doThrow(new RuntimeException()).when(accountDAOSpy).update(AccountDTO.of(2, 250));
+        doThrow(new RuntimeException()).when(accountDAOSpy).update(Account.of(2, 250));
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         try {
             trDao.transfer(dto);
         } catch (RuntimeException ex) {
-            verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
+            verify(accountDAOSpy, times(2)).update(any(Account.class), any(Handle.class));
             assertEquals("donor-client money changed", 100, accountDAO.getById(1).getAmount());
             assertEquals("acceptor-client money changed", 200, accountDAO.getById(2).getAmount());
         }
@@ -71,7 +71,7 @@ public class TransferDAOImplTest {
         AccountDAO accountDAOSpy = spy(accountDAO);
         TransferDAO trDao = new TransferDAOImpl(jdbi, accountDAOSpy);
         trDao.transfer(dto);
-        verify(accountDAOSpy, times(2)).update(any(AccountDTO.class), any(Handle.class));
+        verify(accountDAOSpy, times(2)).update(any(Account.class), any(Handle.class));
         assertEquals("donor-client money changed", 50, accountDAO.getById(1).getAmount());
         assertEquals("acceptor-client money changed", 250, accountDAO.getById(2).getAmount());
     }

@@ -1,6 +1,6 @@
-package com.revolut.test.dto;
+package com.revolut.test.entities;
 
-public class TransferDTO {
+public class Transfer {
 
     private int idFrom;
 
@@ -20,10 +20,10 @@ public class TransferDTO {
         return amount;
     }
 
-    private TransferDTO() {
+    private Transfer() {
     }
 
-    private TransferDTO(int idFrom, int idTo, int amount) {
+    private Transfer(int idFrom, int idTo, int amount) {
         this.idFrom = idFrom;
         this.idTo = idTo;
         this.amount = amount;
@@ -55,8 +55,8 @@ public class TransferDTO {
             return this;
         }
 
-        public TransferDTO build() {
-            return new TransferDTO(this.idFrom, this.idTo, this.amount);
+        public Transfer build() {
+            return new Transfer(this.idFrom, this.idTo, this.amount);
         }
 
     }
@@ -67,8 +67,8 @@ public class TransferDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof TransferDTO) {
-            TransferDTO otherDTO = (TransferDTO) o;
+        if (o instanceof Transfer) {
+            Transfer otherDTO = (Transfer) o;
             return this.idFrom == otherDTO.idFrom
                     && this.idTo == otherDTO.idTo
                     && this.amount == otherDTO.amount;

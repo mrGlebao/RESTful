@@ -1,7 +1,7 @@
 package com.revolut.test.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.revolut.test.dto.AccountDTO;
+import com.revolut.test.entities.Account;
 import com.revolut.test.service.AccountService;
 
 import javax.ws.rs.*;
@@ -29,14 +29,14 @@ public class AccountResource extends AbstractResource {
     @PUT
     @Path("/add")
     @Timed
-    public Response add(final AccountDTO dto) {
+    public Response add(final Account dto) {
         return wrapIntoResponse(service.add(dto));
     }
 
     @POST
-    @Path("/{user}/update")
+    @Path("/update")
     @Timed
-    public Response update(final AccountDTO dto) {
+    public Response update(final Account dto) {
         return wrapIntoResponse(service.update(dto));
     }
 

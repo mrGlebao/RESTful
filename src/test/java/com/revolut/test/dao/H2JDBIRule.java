@@ -1,4 +1,4 @@
-package com.revolut.test.api;
+package com.revolut.test.dao;
 
 import com.codahale.metrics.MetricRegistry;
 import io.dropwizard.db.DataSourceFactory;
@@ -11,11 +11,11 @@ import org.junit.rules.ExternalResource;
 
 public class H2JDBIRule extends ExternalResource {
 
-    private Jdbi dbi;
+    private Jdbi jdbi;
     private Handle handle;
 
     public Jdbi getJdbi() {
-        return dbi;
+        return jdbi;
     }
 
     public Handle getHandle() {
@@ -26,16 +26,12 @@ public class H2JDBIRule extends ExternalResource {
     protected void before() throws Throwable {
         Environment environment = new Environment("test-env",
                 Jackson.newObjectMapper(), null, new MetricRegistry(), null);
-        dbi = new JdbiFactory().build(environment, getDataSourceFactory(),
+        jdbi = new JdbiFactory().build(environment, getDataSourceFactory(),
                 "test");
-        handle = dbi.open();
+        handle = jdbi.open();
         createDatabase();
     }
 
-    /**
-     * This is where you create your databases using handle.createScript() or handle.createStatement() and so on....Remember to
-     * wrap them with handle.begin() and handle.commit() so that the change is visible for test code
-     */
     public void createDatabase() {
         handle.begin();
         handle.createScript("create table account (id int primary key, amount int)").execute();

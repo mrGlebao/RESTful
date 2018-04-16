@@ -1,22 +1,21 @@
-package com.revolut.test.dto;
+package com.revolut.test.entities;
 
-public class AccountDTO {
+public class Account {
 
     private int id;
 
     private int amount;
 
-    public AccountDTO() {
+    public Account() {
     }
 
-    //    @JdbiConstructor
-    private AccountDTO(int id, int amount) {
+    private Account(int id, int amount) {
         this.id = id;
         this.amount = amount;
     }
 
-    public static AccountDTO of(int id, int amount) {
-        return new AccountDTO(id, amount);
+    public static Account of(int id, int amount) {
+        return new Account(id, amount);
     }
 
     public int getId() {
@@ -37,8 +36,8 @@ public class AccountDTO {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof AccountDTO) {
-            AccountDTO otherDTO = (AccountDTO) o;
+        if (o instanceof Account) {
+            Account otherDTO = (Account) o;
             return this.id == otherDTO.id && this.amount == otherDTO.amount;
         }
         return false;

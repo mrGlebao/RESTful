@@ -1,8 +1,8 @@
 package com.revolut.test.service.impl;
 
-import com.revolut.test.db.TransferDAO;
-import com.revolut.test.dto.Result;
-import com.revolut.test.dto.TransferDTO;
+import com.revolut.test.dao.TransferDAO;
+import com.revolut.test.entities.Result;
+import com.revolut.test.entities.Transfer;
 import com.revolut.test.service.TransferService;
 
 public class TransferServiceImpl implements TransferService {
@@ -14,7 +14,7 @@ public class TransferServiceImpl implements TransferService {
     }
 
     @Override
-    public Result<TransferDTO> transfer(TransferDTO dto) {
+    public Result<Transfer> transfer(Transfer dto) {
         try {
             dao.transfer(dto);
             return Result.success(dto);

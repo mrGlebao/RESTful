@@ -1,4 +1,4 @@
-package com.revolut.test.resources;
+package com.revolut.test.resources.simple;
 
 import com.codahale.metrics.annotation.Timed;
 

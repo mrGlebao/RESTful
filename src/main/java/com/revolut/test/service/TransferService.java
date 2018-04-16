@@ -1,10 +1,10 @@
 package com.revolut.test.service;
 
-import com.revolut.test.dto.Result;
-import com.revolut.test.dto.TransferDTO;
+import com.revolut.test.entities.Result;
+import com.revolut.test.entities.Transfer;
 
 public interface TransferService {
 
-    Result<TransferDTO> transfer(TransferDTO dto);
+    Result<Transfer> transfer(Transfer dto);
 
 }

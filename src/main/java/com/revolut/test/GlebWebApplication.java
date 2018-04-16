@@ -1,14 +1,12 @@
 package com.revolut.test;
 
-import com.revolut.test.db.AccountDAO;
-import com.revolut.test.db.TransferDAO;
-import com.revolut.test.db.impl.AccountDAOImpl;
-import com.revolut.test.db.impl.TransferDAOImpl;
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.health.SimpleHealthCheck;
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.dao.TransferDAO;
+import com.revolut.test.dao.impl.AccountDAOImpl;
+import com.revolut.test.dao.impl.TransferDAOImpl;
 import com.revolut.test.resources.AccountResource;
-import com.revolut.test.resources.PingPongResource;
 import com.revolut.test.resources.TransferResource;
+import com.revolut.test.resources.simple.PingPongResource;
 import com.revolut.test.service.AccountService;
 import com.revolut.test.service.TransferService;
 import com.revolut.test.service.impl.AccountServiceImpl;
@@ -41,28 +39,23 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
     public void run(final GlebWebConfiguration configuration,
                     final Environment environment) {
         environment.jersey().register(new PingPongResource());
-        environment.healthChecks().register("health check", new SimpleHealthCheck());
 
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
 
-        AccountDAO dao = new AccountDAOImpl(jdbi);//jdbi.onDemand(AccountDAO.class);
-        TransferDAO transferDAO = new TransferDAOImpl(jdbi, dao);//jdbi.onDemand(TransferDAO.class);
-        TransferService transferService = new TransferServiceImpl(transferDAO);
+        AccountDAO dao = new AccountDAOImpl(jdbi);
+        dao.createTransferTable();
+        TransferDAO transferDAO = new TransferDAOImpl(jdbi, dao);
+
         AccountService accountService = new AccountServiceImpl(dao);
-        initEntities(dao);
+        TransferService transferService = new TransferServiceImpl(transferDAO);
 
         jdbi.installPlugin(new H2DatabasePlugin());
         jdbi.installPlugin(new SqlObjectPlugin());
+
         environment.jersey().register(new AccountResource(accountService));
         environment.jersey().register(new TransferResource(transferService));
 
-    }
-
-    public void initEntities(AccountDAO dao) {
-        dao.createTransferTable();
-        dao.insert(AccountDTO.of(1, 1000));
-        dao.insert(AccountDTO.of(2, 2000));
     }
 
 }

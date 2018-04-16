@@ -1,7 +1,7 @@
 package com.revolut.test.resources;
 
 import com.codahale.metrics.annotation.Timed;
-import com.revolut.test.dto.TransferDTO;
+import com.revolut.test.entities.Transfer;
 import com.revolut.test.service.TransferService;
 
 import javax.ws.rs.Consumes;
@@ -25,7 +25,7 @@ public class TransferResource extends AbstractResource {
     @POST
     @Consumes({"application/json"})
     @Timed
-    public Response update(final TransferDTO dto) {
+    public Response update(final Transfer dto) {
         return wrapIntoResponse(service.transfer(dto));
 
     }

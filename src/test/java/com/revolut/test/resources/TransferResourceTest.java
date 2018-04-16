@@ -1,7 +1,7 @@
 package com.revolut.test.resources;
 
-import com.revolut.test.dto.Result;
-import com.revolut.test.dto.TransferDTO;
+import com.revolut.test.entities.Result;
+import com.revolut.test.entities.Transfer;
 import com.revolut.test.service.TransferService;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.*;
 
 public class TransferResourceTest {
 
-    private final TransferDTO dto = TransferDTO
+    private final Transfer dto = Transfer
             .builder()
             .withIdFrom(1)
             .withIdTo(2)
@@ -49,7 +49,7 @@ public class TransferResourceTest {
         verify(service, times(1)).transfer(dto);
 
         assertEquals("invalid post response status", response.getStatus(), 200);
-        assertEquals("invalid post response content", dto, response.readEntity(TransferDTO.class));
+        assertEquals("invalid post response content", dto, response.readEntity(Transfer.class));
     }
 
     @Test

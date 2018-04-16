@@ -1,14 +1,14 @@
 package com.revolut.test.service;
 
-import com.revolut.test.dto.AccountDTO;
-import com.revolut.test.dto.Result;
+import com.revolut.test.entities.Account;
+import com.revolut.test.entities.Result;
 
 public interface AccountService {
 
-    Result<AccountDTO> get(int i);
+    Result<Account> get(int i);
 
-    Result<AccountDTO> add(AccountDTO dto);
+    Result<Account> add(Account dto);
 
-    Result<AccountDTO> update(AccountDTO dto);
+    Result<Account> update(Account dto);
 
 }

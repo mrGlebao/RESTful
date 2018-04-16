@@ -1,4 +1,4 @@
-package com.revolut.test.dto;
+package com.revolut.test.entities;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
@@ -11,23 +11,23 @@ public class TransferSerializationTest {
 
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
-    private TransferDTO dtoEquivalentToJson = TransferDTO.builder()
+    private Transfer dtoEquivalentToJson = Transfer.builder()
             .withIdFrom(1)
             .withIdTo(2)
             .withAmount(100)
             .build();
 
     @Test
-    public void testTransferDTOSerialization_roundtrip() throws Exception {
+    public void testTransfer_serialization_roundtrip() throws Exception {
         String expected = MAPPER.writeValueAsString(dtoEquivalentToJson);
-        String actual = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/transfer.json"), TransferDTO.class));
+        String actual = MAPPER.writeValueAsString(MAPPER.readValue(fixture("fixtures/transfer.json"), Transfer.class));
         assertEquals("unexpected serialization result", expected, actual);
     }
 
 
     @Test
-    public void deserializesFromJSON() throws Exception {
-        TransferDTO actual = MAPPER.readValue(fixture("fixtures/transfer.json"), TransferDTO.class);
+    public void testTransfer_deserializesFromJSON() throws Exception {
+        Transfer actual = MAPPER.readValue(fixture("fixtures/transfer.json"), Transfer.class);
         assertEquals("unexpected deserialization result", actual, dtoEquivalentToJson);
     }
 }

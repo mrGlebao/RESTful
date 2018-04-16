@@ -1,5 +1,6 @@
 package com.revolut.test.resources;
 
+import com.revolut.test.resources.simple.PingPongResource;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory;
 import org.junit.Rule;

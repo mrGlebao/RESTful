@@ -1,8 +1,8 @@
-package com.revolut.test.db.impl;
+package com.revolut.test.dao.impl;
 
-import com.revolut.test.api.H2JDBIRule;
-import com.revolut.test.db.AccountDAO;
-import com.revolut.test.dto.AccountDTO;
+import com.revolut.test.dao.H2JDBIRule;
+import com.revolut.test.dao.AccountDAO;
+import com.revolut.test.entities.Account;
 import org.jdbi.v3.core.Handle;
 import org.jdbi.v3.core.Jdbi;
 import org.junit.After;
@@ -21,7 +21,7 @@ public class AccountDAOImplTest {
 
     private AccountDAOImpl accountDAO;
     private Jdbi jdbi;
-    AccountDTO dto = AccountDTO.of(1, 100);
+    Account dto = Account.of(1, 100);
 
     @Rule
     public H2JDBIRule rule = new H2JDBIRule();
@@ -40,17 +40,17 @@ public class AccountDAOImplTest {
     @Test
     public void testAccountDAO_insert() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        AccountDTO newDTO = AccountDTO.of(dto.getId() + 1, dto.getAmount());
+        Account newDTO = Account.of(dto.getId() + 1, dto.getAmount());
         accountDAOSpy.insert(newDTO);
-        verify(accountDAOSpy, times(1)).insert(any(AccountDTO.class));
-        verify(accountDAOSpy, times(1)).insert(any(AccountDTO.class), any(Handle.class));
+        verify(accountDAOSpy, times(1)).insert(any(Account.class));
+        verify(accountDAOSpy, times(1)).insert(any(Account.class), any(Handle.class));
         assertEquals("Unexpected result of insert", newDTO, accountDAO.getById(newDTO.getId()));
     }
 
     @Test
     public void testAccountDAO_getById() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        AccountDTO actual = accountDAOSpy.getById(dto.getId());
+        Account actual = accountDAOSpy.getById(dto.getId());
         verify(accountDAOSpy, times(1)).getById(anyInt());
         assertEquals("Unexpected result of getByID", dto, actual);
     }
@@ -58,10 +58,10 @@ public class AccountDAOImplTest {
     @Test
     public void testAccountDAO_update() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        AccountDTO newDTO = AccountDTO.of(dto.getId(), dto.getAmount() + 100);
+        Account newDTO = Account.of(dto.getId(), dto.getAmount() + 100);
         accountDAOSpy.update(newDTO);
-        verify(accountDAOSpy, times(1)).update(any(AccountDTO.class));
-        verify(accountDAOSpy, times(1)).update(any(AccountDTO.class), any(Handle.class));
+        verify(accountDAOSpy, times(1)).update(any(Account.class));
+        verify(accountDAOSpy, times(1)).update(any(Account.class), any(Handle.class));
         assertEquals("Unexpected result of update", newDTO, accountDAO.getById(newDTO.getId()));
     }
 
