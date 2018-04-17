@@ -65,7 +65,7 @@ public class TransferResourceTest {
         verify(service, times(1)).transfer(dto);
 
         assertEquals("invalid post response status", 500, response.getStatus());
-        assertEquals("invalid post response content", "abc", response.readEntity(RuntimeException.class).getMessage());
+        assertEquals("invalid post response content", "abc", response.readEntity(String.class));
     }
 
 }

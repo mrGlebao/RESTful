@@ -9,6 +9,6 @@ class AbstractResource {
         if (result.isSuccess()) {
             return Response.ok().entity(result.getData()).build();
         }
-        return Response.serverError().entity(result.getEvent()).build();
+        return Response.serverError().entity(result.getEvent().getMessage()).build();
     }
 }
