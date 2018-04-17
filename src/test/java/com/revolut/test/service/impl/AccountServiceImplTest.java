@@ -13,7 +13,7 @@ public class AccountServiceImplTest {
 
     private AccountDAO dao = mock(AccountDAO.class);
 
-    private Account expected = Account.of(1, 200);
+    private Account expected = new Account(1, 200);
 
     private AccountService service = new AccountServiceImpl(dao);
 

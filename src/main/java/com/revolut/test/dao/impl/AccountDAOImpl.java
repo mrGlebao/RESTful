@@ -48,7 +48,7 @@ public class AccountDAOImpl implements AccountDAO {
         return jdbi.withHandle(
                 h -> h.createQuery("select * from account where id = :id")
                         .bind("id", id)
-                        .map((rs, ctx) -> Account.of(rs.getInt("id"), rs.getInt("amount")))
+                        .map((rs, ctx) -> new Account(rs.getInt("id"), rs.getInt("amount")))
                         .findOnly());
     }
 

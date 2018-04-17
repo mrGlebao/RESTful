@@ -18,9 +18,9 @@ public class TransferResourceTest {
 
     private final Transfer dto = Transfer
             .builder()
-            .withIdFrom(1)
-            .withIdTo(2)
-            .withAmount(1000)
+            .idFrom(1)
+            .idTo(2)
+            .amount(1000)
             .build();
 
     private TransferService service = mock(TransferService.class);

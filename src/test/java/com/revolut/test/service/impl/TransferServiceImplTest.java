@@ -18,9 +18,9 @@ public class TransferServiceImplTest {
     private TransferDAO dao = mock(TransferDAO.class);
 
     private Transfer expected = Transfer.builder()
-            .withIdFrom(new Random().nextInt())
-            .withIdTo(new Random().nextInt())
-            .withAmount(new Random().nextInt())
+            .idFrom(new Random().nextInt())
+            .idTo(new Random().nextInt())
+            .amount(new Random().nextInt())
             .build();
 
     private TransferService service = new TransferServiceImpl(dao);

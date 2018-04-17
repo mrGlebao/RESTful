@@ -29,8 +29,8 @@ public class TransferDAOImpl implements TransferDAO {
                     if (donor.getAmount() < dto.getAmount()) {
                         throw new RuntimeException(AMOUNT_IS_GREATER_THAN_BALANCE);
                     }
-                    dao.update(Account.of(donor.getId(), donor.getAmount() - dto.getAmount()), h);
-                    dao.update(Account.of(acceptor.getId(), acceptor.getAmount() + dto.getAmount()), h);
+                    dao.update(new Account(donor.getId(), donor.getAmount() - dto.getAmount()), h);
+                    dao.update(new Account(acceptor.getId(), acceptor.getAmount() + dto.getAmount()), h);
                 }
         );
     }

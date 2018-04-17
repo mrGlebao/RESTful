@@ -23,9 +23,9 @@ public class TransferDAOImplTest {
     private AccountDAO mock = mock(AccountDAO.class);
     private AccountDAOImpl accountDAO;
     private Jdbi jdbi;
-    private Account donor = Account.of(1, 100);
-    private Account acceptor = Account.of(2, 200);
-    private Transfer transfer = Transfer.builder().withIdFrom(1).withIdTo(2).withAmount(50).build();
+    private Account donor = new Account(1, 100);
+    private Account acceptor = new Account(2, 200);
+    private Transfer transfer = Transfer.builder().idFrom(1).idTo(2).amount(50).build();
 
 
     @Before
@@ -48,9 +48,9 @@ public class TransferDAOImplTest {
         TransferDAO trDao = new TransferDAOImpl(jdbi, mock);
         try {
             trDao.transfer(Transfer.builder()
-                    .withIdFrom(donor.getId())
-                    .withIdTo(acceptor.getId())
-                    .withAmount(donor.getAmount() + 100)
+                    .idFrom(donor.getId())
+                    .idTo(acceptor.getId())
+                    .amount(donor.getAmount() + 100)
                     .build());
         } catch (RuntimeException ignored) {
         }
@@ -64,7 +64,7 @@ public class TransferDAOImplTest {
 
         AccountDAO acountDAOSpy = spy(accountDAO);
 
-        Account donorUpdated = Account.of(donor.getId(), donor.getAmount() - transfer.getAmount());
+        Account donorUpdated = new Account(donor.getId(), donor.getAmount() - transfer.getAmount());
 
         doThrow(new RuntimeException("abc")).when(acountDAOSpy).update(eq(donorUpdated), any(Handle.class));
         when(acountDAOSpy.getById(donor.getId())).thenReturn(donor);
@@ -83,7 +83,7 @@ public class TransferDAOImplTest {
     @Test
     public void testTransfer_FailsOnSecondStep() {
         AccountDAO acountDAOSpy = spy(accountDAO);
-        Account acceptorUpdated = Account.of(acceptor.getId(), acceptor.getAmount() + transfer.getAmount());
+        Account acceptorUpdated = new Account(acceptor.getId(), acceptor.getAmount() + transfer.getAmount());
         doThrow(new RuntimeException("abc")).when(acountDAOSpy).update(eq(acceptorUpdated), any(Handle.class));
 
         TransferDAO trDao = new TransferDAOImpl(jdbi, acountDAOSpy);

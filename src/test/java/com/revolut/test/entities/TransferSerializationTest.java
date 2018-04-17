@@ -12,9 +12,9 @@ public class TransferSerializationTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
 
     private Transfer dtoEquivalentToJson = Transfer.builder()
-            .withIdFrom(1)
-            .withIdTo(2)
-            .withAmount(100)
+            .idFrom(1)
+            .idTo(2)
+            .amount(100)
             .build();
 
     @Test

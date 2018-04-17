@@ -24,7 +24,7 @@ public class AccountResourceTest {
             .addResource(new AccountResource(service))
             .build();
 
-    private final Account account = Account.of(1, 2);
+    private final Account account = new Account(1, 2);
 
     @Before
     public void setup() {

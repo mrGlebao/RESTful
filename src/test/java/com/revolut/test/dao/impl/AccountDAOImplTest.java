@@ -21,7 +21,7 @@ public class AccountDAOImplTest {
 
     private AccountDAOImpl accountDAO;
     private Jdbi jdbi;
-    Account dto = Account.of(1, 100);
+    Account dto = new Account(1, 100);
 
     @Rule
     public H2JDBIRule rule = new H2JDBIRule();
@@ -40,7 +40,7 @@ public class AccountDAOImplTest {
     @Test
     public void testAccountDAO_insert() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        Account newDTO = Account.of(dto.getId() + 1, dto.getAmount());
+        Account newDTO = new Account(dto.getId() + 1, dto.getAmount());
         accountDAOSpy.insert(newDTO);
         verify(accountDAOSpy, times(1)).insert(any(Account.class));
         verify(accountDAOSpy, times(1)).insert(any(Account.class), any(Handle.class));
@@ -58,7 +58,7 @@ public class AccountDAOImplTest {
     @Test
     public void testAccountDAO_update() {
         AccountDAO accountDAOSpy = spy(accountDAO);
-        Account newDTO = Account.of(dto.getId(), dto.getAmount() + 100);
+        Account newDTO = new Account(dto.getId(), dto.getAmount() + 100);
         accountDAOSpy.update(newDTO);
         verify(accountDAOSpy, times(1)).update(any(Account.class));
         verify(accountDAOSpy, times(1)).update(any(Account.class), any(Handle.class));
