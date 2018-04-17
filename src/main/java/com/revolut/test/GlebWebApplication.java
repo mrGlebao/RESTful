@@ -32,30 +32,26 @@ public class GlebWebApplication extends Application<GlebWebConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<GlebWebConfiguration> bootstrap) {
-        // TODO: application initialization
     }
 
     @Override
-    public void run(final GlebWebConfiguration configuration,
-                    final Environment environment) {
-        environment.jersey().register(new PingPongResource());
-
+    public void run(final GlebWebConfiguration configuration, final Environment environment) {
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "h2");
+        jdbi.installPlugin(new H2DatabasePlugin());
+        jdbi.installPlugin(new SqlObjectPlugin());
 
         AccountDAO dao = new AccountDAOImpl(jdbi);
-        dao.createTransferTable();
         TransferDAO transferDAO = new TransferDAOImpl(jdbi, dao);
 
         AccountService accountService = new AccountServiceImpl(dao);
         TransferService transferService = new TransferServiceImpl(transferDAO);
 
-        jdbi.installPlugin(new H2DatabasePlugin());
-        jdbi.installPlugin(new SqlObjectPlugin());
+        dao.createTransferTable();
 
         environment.jersey().register(new AccountResource(accountService));
         environment.jersey().register(new TransferResource(transferService));
-
+        environment.jersey().register(new PingPongResource());
     }
 
 }

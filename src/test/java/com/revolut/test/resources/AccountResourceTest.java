@@ -17,17 +17,17 @@ import static org.mockito.Mockito.*;
 public class AccountResourceTest {
 
     private static final AccountService service = mock(AccountService.class);
+
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
             .addResource(new AccountResource(service))
             .build();
-    private final Account dto = Account.of(1, 2);
+
     private final Account account = Account.of(1, 2);
 
     @Before
     public void setup() {
-
     }
 
     @After
@@ -49,78 +49,34 @@ public class AccountResourceTest {
 
     }
 
-
-    @Test
-    @Ignore
-    public void testAccountResource_viewException() {
-        when(service.get(anyInt())).thenThrow(new RuntimeException("abc"));
-
-        Account getRequestResult = resources
-                .target("/accounts/" + account.getId() + "/view")
-                .request()
-                .get(Account.class);
-
-        verify(service, times(1)).get(account.getId());
-        assertEquals("invalid get result", getRequestResult, account);
-    }
-
     @Test
     public void testAccountResource_addSuccess() {
         when(service.add(any(Account.class))).thenReturn(Result.success(account));
+
         Response response = resources
                 .target("/accounts/add")
                 .request()
-                .put(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
+                .put(Entity.entity(account, MediaType.APPLICATION_JSON_TYPE));
 
-        verify(service, times(1)).add(dto);
+        verify(service, times(1)).add(account);
 
         assertEquals("invalid put response status", response.getStatus(), 200);
-        assertEquals("invalid post response content", dto, response.readEntity(Account.class));
-    }
-
-    @Test
-    @Ignore
-    public void testAccountResource_addFails() {
-        when(service.add(any(Account.class))).thenThrow(new RuntimeException("abc"));
-        Response response = resources
-                .target("/accounts/add")
-                .request()
-                .put(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
-
-        verify(service, times(1)).add(dto);
-
-        assertEquals("invalid put response status", response.getStatus(), 500);
-        assertEquals("invalid put response content", "abc", response.readEntity(RuntimeException.class).getMessage());
+        assertEquals("invalid put response content", account, response.readEntity(Account.class));
     }
 
     @Test
     public void testAccountResource_updateSuccess() {
         when(service.update(any(Account.class))).thenReturn(Result.success(account));
+
         Response response = resources
                 .target("/accounts/update")
                 .request()
-                .post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
+                .post(Entity.entity(account, MediaType.APPLICATION_JSON_TYPE));
 
         verify(service, times(1)).update(account);
 
         assertEquals("invalid post response status", response.getStatus(), 200);
-        assertEquals("invalid post response content", dto, response.readEntity(Account.class));
+        assertEquals("invalid post response content", account, response.readEntity(Account.class));
     }
-
-    @Test
-    @Ignore
-    public void testAccountResource_updateFails() {
-        when(service.update(any(Account.class))).thenThrow(new RuntimeException("abc"));
-        Response response = resources
-                .target("/accounts/update")
-                .request()
-                .put(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
-
-        verify(service, times(1)).add(dto);
-
-        assertEquals("invalid put response status", response.getStatus(), 500);
-        assertEquals("invalid put response content", "abc", response.readEntity(RuntimeException.class).getMessage());
-    }
-
 
 }

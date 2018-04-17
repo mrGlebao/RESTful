@@ -23,11 +23,10 @@ public class H2JDBIRule extends ExternalResource {
     }
 
     @Override
-    protected void before() throws Throwable {
+    protected void before() {
         Environment environment = new Environment("test-env",
                 Jackson.newObjectMapper(), null, new MetricRegistry(), null);
-        jdbi = new JdbiFactory().build(environment, getDataSourceFactory(),
-                "test");
+        jdbi = new JdbiFactory().build(environment, getDataSourceFactory(), "test");
         handle = jdbi.open();
         createDatabase();
     }

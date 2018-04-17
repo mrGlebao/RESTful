@@ -22,7 +22,9 @@ public class TransferResourceTest {
             .withIdTo(2)
             .withAmount(1000)
             .build();
+
     private TransferService service = mock(TransferService.class);
+
     @Rule
     public final ResourceTestRule resources = ResourceTestRule.builder()
             .setTestContainerFactory(new GrizzlyWebTestContainerFactory())
@@ -63,21 +65,6 @@ public class TransferResourceTest {
         verify(service, times(1)).transfer(dto);
 
         assertEquals("invalid post response status", 500, response.getStatus());
-        assertEquals("invalid post response content", "abc", response.readEntity(RuntimeException.class).getMessage());
-    }
-
-    @Test
-    @Ignore
-    public void testTransferResource_transferFails() {
-        doThrow(new RuntimeException("abc")).when(service).transfer(dto);
-        Response response = resources
-                .target("/transfer")
-                .request()
-                .post(Entity.entity(dto, MediaType.APPLICATION_JSON_TYPE));
-
-        verify(service, times(1)).transfer(dto);
-
-        assertEquals("invalid post response status", response.getStatus(), 500);
         assertEquals("invalid post response content", "abc", response.readEntity(RuntimeException.class).getMessage());
     }
 

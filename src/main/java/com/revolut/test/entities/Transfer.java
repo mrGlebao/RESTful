@@ -68,10 +68,10 @@ public class Transfer {
     @Override
     public boolean equals(Object o) {
         if (o instanceof Transfer) {
-            Transfer otherDTO = (Transfer) o;
-            return this.idFrom == otherDTO.idFrom
-                    && this.idTo == otherDTO.idTo
-                    && this.amount == otherDTO.amount;
+            Transfer other = (Transfer) o;
+            return this.idFrom == other.idFrom
+                    && this.idTo == other.idTo
+                    && this.amount == other.amount;
         }
         return false;
     }

@@ -9,6 +9,8 @@ import org.jdbi.v3.sqlobject.transaction.Transaction;
 
 public class TransferDAOImpl implements TransferDAO {
 
+    private final String AMOUNT_IS_GREATER_THAN_BALANCE = "Amount to transfer can't be greater than account balance!";
+
     private final AccountDAO dao;
     private final Jdbi jdbi;
 
@@ -24,6 +26,9 @@ public class TransferDAOImpl implements TransferDAO {
         Account acceptor = dao.getById(dto.getIdTo());
         jdbi.useTransaction(
                 h -> {
+                    if (donor.getAmount() < dto.getAmount()) {
+                        throw new RuntimeException(AMOUNT_IS_GREATER_THAN_BALANCE);
+                    }
                     dao.update(Account.of(donor.getId(), donor.getAmount() - dto.getAmount()), h);
                     dao.update(Account.of(acceptor.getId(), acceptor.getAmount() + dto.getAmount()), h);
                 }
